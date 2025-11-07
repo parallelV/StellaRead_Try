@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>StellaRead — Profile & Main</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #6b6b6b;
+      --accent: #2f6bed;
+      --btn: #31493c;
+      --btn-text: #fff;
+      --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    [data-theme="dark"] {
+      --bg: #1d1b16;
+      --card: #26231b;
+      --text: #eaeaea;
+      --muted: #aaa;
+      --btn: #7aa37a;
+      --btn-text: #111;
+      --shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    * {
+      box-sizing: border-box;
+      font-family: 'Inter', Segoe UI, Roboto, sans-serif;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      transition: .3s background, .3s color;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background: var(--card);
+      box-shadow: var(--shadow);
+    }
+    header .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    nav button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: 600;
+      color: var(--accent);
+      padding: 8px 10px;
+      border-radius: 6px;
+      transition: .2s;
+    }
+    nav button:hover {
+      background: rgba(47,107,237,0.1);
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    .card {
+      background: var(--card);
+      padding: 1.5rem;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-top: .8rem;
+      font-size: .9rem;
+      color: var(--muted);
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: transparent;
+      color: var(--text);
+      margin-top: .3rem;
+      font-size: .95rem;
+    }
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .btn {
+      background: var(--btn);
+      color: var(--btn-text);
+      border: none;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      width: fit-content;
+    }
+    .btn:hover {
+      opacity: .9;
+    }
+    .toolbar {
+      display: flex;
+      gap: .8rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .search input {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .book {
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: .8rem;
+    }
+    .book img {
+      width: 100%;
+      border-radius: 6px;
+    }
+    .book h3 {
+      margin: .5rem 0 0;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+    .book p {
+      margin: .2rem 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .favorite {
+      cursor: pointer;
+      font-size: 1.3rem;
+    }
+    #btnl {
+      background-color: red;
+    }
+    #popup {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.45);
+      z-index: 50;
+    }
+    #popup .box {
+      background: var(--card);
+      color: var(--text);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      text-align: center;
+      width: 300px;
+      animation: pop .3s ease;
+    }
+    #popup h2 {
+      margin: 0 0 .5rem 0;
+      color: var(--accent);
+    }
+    #popup p {
+      margin: 0 0 1rem 0;
+      color: var(--muted);
+    }
+    @keyframes pop {
+      0% { transform: scale(.9); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+  <header>
+    <div class="left">
+      <div class="logo">
+        <img src="logo.png" alt="StellaRead" width="100" height="100">
+      </div>
+      <div>
+        <div class="brand">Your Digital Library</div>
+        <div style="font-size:.9rem;color:var(--muted)">— StellaRead</div>
+      </div>
+    </div>
+    <nav>
+      <button id="navProfile">Profile</button>
+      <button id="navHome">Home</button>
+      <button id="toggleTheme">🌙</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="profilePage" class="card">
+      <h2>👤 Profile</h2>
+      <form id="profileForm">
+        <label for="name">Display Name</label>
+        <input type="text" id="name" value="Guest Reader">
+        <label for="email">Email</label>
+        <input type="email" id="email" value="guest@stellaread.com">
+        <label for="bio">Bio</label>
+        <textarea id="bio">Book lover and curious mind.</textarea>
+        <button type="submit" class="btn">Save Profile</button>
+        <button type="submit" class="btn" id="btnl">Log Out</button>
+      </form>
+    </section>
+
+    <section id="homePage" class="card" style="display:none">
+      <div class="toolbar">
+        <div class="search">
+          <input type="text" id="searchInput" placeholder="Search by title or author...">
+          <button id="searchBtn" class="btn">Search</button>
+        </div>
+        <select id="sortSelect">
+          <option value="title">Sort by Title (A–Z)</option>
+          <option value="author">Sort by Author</option>
+          <option value="rating">Sort by Rating (High → Low)</option>
+        </select>
+      </div>
+      <div id="bookList" class="book-grid"></div>
+    </section>
+  </main>
+
+  <div id="popup">
+    <div class="box">
+      <h2>✅ Task Completed!</h2>
+      <p id="popupMsg"></p>
+      <button id="closePopup" class="btn">OK</button>
+    </div>
+  </div>
+
+<script>
+  const books = [
+    { title: "The Great Gatsby", author: "F. Scott Fitzgerald", rating: 4.5, cover: "https://picsum.photos/seed/a/200/280" },
+    { title: "To Kill a Mockingbird", author: "Harper Lee", rating: 4.8, cover: "https://picsum.photos/seed/b/200/280" },
+    { title: "1984", author: "George Orwell", rating: 4.7, cover: "https://picsum.photos/seed/c/200/280" },
+    { title: "Pride and Prejudice", author: "Jane Austen", rating: 4.6, cover: "https://picsum.photos/seed/d/200/280" }
+  ];
+
+  let favorites = [];
+  const list = document.getElementById("bookList");
+
+  function renderBooks(arr) {
+    list.innerHTML = "";
+    arr.forEach((b, i) => {
+      const div = document.createElement("div");
+      div.className = "book";
+      div.innerHTML = `<img src="${b.cover}" alt="">
+        <h3>${b.title}</h3>
+        <p>${b.author}</p>
+        <p>⭐ ${b.rating}</p>
+        <span class="favorite" data-index="${i}" title="Add to Favorites">♡</span>`;
+      list.appendChild(div);
+    });
+  }
+
+  renderBooks(books);
+
+  document.getElementById("searchBtn").onclick = () => {
+    const term = document.getElementById("searchInput").value.toLowerCase();
+    const results = books.filter(b => b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term));
+    renderBooks(results);
+    showPopup(4, "You accomplished Task 4 — Please proceed to Task 5 (View Book Details).");
+  };
+
+  document.getElementById("sortSelect").onchange = e => {
+    let arr = [...books];
+    const v = e.target.value;
+    if (v === "title") arr.sort((a, b) => a.title.localeCompare(b.title));
+    if (v === "author") arr.sort((a, b) => a.author.localeCompare(b.author));
+    if (v === "rating") arr.sort((a, b) => b.rating - a.rating);
+    renderBooks(arr);
+    showPopup(10, "You accomplished Task 10 — Please proceed to Task 11 (Toggle Theme Change).");
+  };
+
+  list.addEventListener("click", e => {
+    if (e.target.classList.contains("favorite")) {
+      const i = e.target.dataset.index;
+      if (!favorites.includes(books[i])) favorites.push(books[i]);
+      e.target.textContent = "❤️";
+      showPopup(9, "You accomplished Task 9 — Please proceed to Task 10 (Sort Books).");
+    }
+  });
+
+  document.getElementById("profileForm").onsubmit = e => {
+    e.preventDefault();
+    showPopup(3, "You accomplished Task 3 — Please proceed to Task 4 (Search Books).");
+  };
+
+  document.getElementById("toggleTheme").onclick = () => {
+    const current = document.body.getAttribute("data-theme");
+    document.body.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    showPopup(11, "You accomplished Task 11 — Please proceed to Task 12 (Log Out).");
+  };
+
+  document.getElementById("btnl").addEventListener("click", e => {
+    e.preventDefault();
+    sessionStorage.clear();
+
+    const popup = document.createElement("div");
+    popup.style.position = "fixed";
+    popup.style.inset = "0";
+    popup.style.background = "rgba(0,0,0,0.5)";
+    popup.style.display = "flex";
+    popup.style.alignItems = "center";
+    popup.style.justifyContent = "center";
+    popup.style.zIndex = "1000";
+
+    popup.innerHTML = `
+      <div style="
+        background:#fff;
+        color:#222;
+        padding:2rem;
+        border-radius:14px;
+        max-width:400px;
+        text-align:center;
+        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        font-family:'Poppins',sans-serif;">
+        <h2 style="color:#2f6bed;margin-top:0;">✅ Task Completed!</h2>
+        <p style="margin:0.5rem 0 1rem;">You accomplished Task 12. This concludes the Usability Testing.</p>
+        <p style="margin-bottom:1rem;">Please proceed to answer the survey by clicking the link below:</p>
+        <a href="#" target="_blank" style="display:inline-block;color:#fff;background:#31493c;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;">Go to Survey</a>
+        <br><br>
+        <button id="closeLogoutPopup" style="margin-top:8px;padding:8px 14px;border:none;border-radius:8px;background:#ccc;cursor:pointer;font-weight:600;">Close</button>
+      </div>
+    `;
+    document.body.appendChild(popup);
+
+    document.getElementById("closeLogoutPopup").addEventListener("click", () => {
+      popup.remove();
+      window.location.href = "login.html";
+    });
+  });
+
+  const profile = document.getElementById("profilePage");
+  const home = document.getElementById("homePage");
+  document.getElementById("navProfile").onclick = () => {
+    profile.style.display = "block";
+    home.style.display = "none";
+  };
+  document.getElementById("navHome").onclick = () => {
+    profile.style.display = "none";
+    home.style.display = "block";
+  };
+
+  const popup = document.getElementById("popup");
+  const msg = document.getElementById("popupMsg");
+  function showPopup(num, text) {
+    msg.textContent = text;
+    popup.style.display = "flex";
+  }
+  document.getElementById("closePopup").onclick = () => popup.style.display = "none";
+
+ const scriptURL = "https://script.google.com/macros/s/AKfycbyDEvh_PdsRDCWqpY8qpvq7yif7fY6hZMNHKzG-D2alxqftJS8x37hzXk5NCyQQ4ZV-JA/exec"; // 🔁 replace with your own URL
+
+// load profile
+async function loadProfile() {
+  const loginId = localStorage.getItem("stella_user");
+  if (!loginId) {
+    alert("⚠️ Please log in first.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${scriptURL}?action=getProfile&username=${encodeURIComponent(loginId)}`);
+    const data = await res.json();
+
+    if (data.status === "success") {
+      document.getElementById("name").value = data.name || "";
+      document.getElementById("email").value = data.email || "";
+      // uncomment pag magdadagdag ng fields
+      // document.getElementById("dob").value = data.dob || "";
+      // document.getElementById("phone").value = data.phone || "";
+      localStorage.setItem("stella_user_canonical", data.username);
+    } else {
+      alert("⚠️ Could not load your profile data.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error while fetching profile data.");
+  }
+}
+
+// Save/Update Profile
+document.getElementById("profileForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const originalUsername = localStorage.getItem("stella_user_canonical") || localStorage.getItem("stella_user");
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  // const dob = document.getElementById("dob").value.trim();
+  // const phone = document.getElementById("phone").value.trim();
+
+  const params = new URLSearchParams({
+    action: "updateProfile",
+    originalUsername: originalUsername,
+    name: name,
+    email: email
+    // dob: dob,
+    // phone: phone
+  });
+
+  try {
+    const res = await fetch(`${scriptURL}?${params.toString()}`, { method: "POST" });
+    const text = await res.text();
+
+    if (text === "updated") {
+      alert("✅ Profile updated successfully!");
+      loadProfile();
+    } else {
+      alert("⚠️ Failed to update profile. Response: " + text);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error while updating profile.");
+  }
+});
+
+document.addEventListener("DOMContentLoaded", loadProfile);
+</script>
+
+</body>
+</html>

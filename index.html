@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign Up — StellaRead</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+    :root {
+      --bg: #EFE9DD;
+      --card: #FFFFFF;
+      --muted: #6b6f6a;
+      --text: #2f2f2f;
+      --accent: #313E34;
+      --accent-strong: #24322a;
+      --radius: 12px;
+      --shadow: 0 12px 30px rgba(45,45,45,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+
+    body {
+      font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.4;
+    }
+
+    .main-header {
+      width: 100%;
+      background: #fff;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .header-logo { height: 72px; width: auto; display: block; }
+    .header-text { display: flex; flex-direction: column; }
+    .brand-title { font-size: 20px; font-weight: 700; color: var(--text); }
+    .brand-sub { font-size: 14px; color: var(--muted); margin-top: 2px; }
+
+    .page { min-height: 100vh; display: grid; place-items: center; padding: 26px; }
+    .card {
+      width: min(1100px, 100%);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .content { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding: 36px 40px 44px; }
+    .left { max-width: 520px; }
+    .page-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+    .small-row { margin-top: 12px; display: flex; gap: 8px; align-items: center; }
+
+    .form { max-width: 480px; margin-top: 6px; }
+    .form label { display: block; margin: 12px 0 6px; font-size: 0.95rem; color: var(--muted); font-weight: 600; }
+    .form input {
+      width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #e6e0d6;
+      background: #fff; color: var(--text); outline: none; font-size: 1rem;
+    }
+    .form input::placeholder { color: #a49e95; }
+    .form input:focus { box-shadow: 0 8px 18px rgba(49,62,52,0.06); border-color: var(--accent-strong); }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 16px; border-radius: 10px; border: none; cursor: pointer;
+      font-weight: 700; transition: all .12s ease;
+    }
+    .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 8px 20px rgba(49,62,52,0.08); }
+    .btn-primary:hover { background: var(--accent-strong); }
+    .full { width: 100%; margin-top: 14px; }
+
+    .row { margin-top: 10px; }
+    .kv { color: var(--muted); font-size: 0.95rem; }
+    .link { color: var(--accent); text-decoration: none; font-weight: 600; }
+    .link:hover { text-decoration: underline; }
+
+    .right { display: grid; place-items: center; }
+    .book-image { width: 380px; max-width: 100%; height: auto; object-fit: contain; }
+    .center { display: flex; align-items: center; justify-content: center; }
+    .error { color: #b00020; }
+
+    @media (max-width: 900px) {
+      .content { grid-template-columns: 1fr; padding: 22px; }
+      .right { order: -1; margin-bottom: 18px; }
+      .book-image { width: 260px; }
+      .header-logo { height: 56px; }
+    }
+
+    #popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    #popup .box {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+      max-width: 300px;
+      animation: fadeIn .3s ease;
+    }
+
+    #popup h2 { margin: 0 0 .5rem; color: #2f6bed; }
+    #popup p { color: #444; margin-bottom: 1rem; }
+    #popup button {
+      background: #31493c; color: #fff; border: none; padding: 8px 14px;
+      border-radius: 8px; font-weight: 600; cursor: pointer;
+    }
+    #popup button:hover { opacity: .9; }
+
+    @keyframes fadeIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="main-header">
+    <img src="logo.png" alt="StellaRead logo" class="header-logo">
+    <div class="header-text">
+      <div class="brand-title">Your Digital Library</div>
+      <div class="brand-sub">— StellaRead</div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="card" aria-label="StellaRead signup card">
+      <div class="content">
+        <div class="left">
+          <h1 class="page-title">Create Account</h1>
+          <form id="signupForm" class="form" autocomplete="on" novalidate>
+            <label for="fullName">Full Name</label>
+            <input id="fullName" type="text" placeholder="Juan Dela Cruz" required>
+
+            <label for="username">Username</label>
+            <input id="username" type="text" placeholder="nickname" required>
+
+            <label for="email">Email</label>
+            <input id="email" type="email" placeholder="you@example.com" required>
+
+            <label for="phone">Phone</label>
+            <input id="phone" type="tel" placeholder="0917-123-4567 or +63 917-123-4567" required>
+
+            <label for="dob">Date of Birth</label>
+            <input id="dob" type="date" required>
+
+            <label for="password">Password</label>
+            <input id="password" type="password" placeholder="Create a password" required>
+
+            <label for="confirmPassword">Confirm Password</label>
+            <input id="confirmPassword" type="password" placeholder="Confirm password" required>
+
+            <button class="btn btn-primary full" type="submit">Sign Up</button>
+            <p id="signupError" class="kv error" style="display:none" aria-live="assertive"></p>
+
+            <div class="row small-row" style="margin-top:12px">
+              <span class="kv">Already have an account?</span>
+              <a href="login.html" class="link">Log In</a>
+            </div>
+          </form>
+        </div>
+        <div class="right center" aria-hidden="true">
+          <img src="booktree.png" alt="book illustration" class="book-image">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="popup">
+    <div class="box">
+      <h2>✅ Task Completed!</h2>
+      <p>You’ve accomplished task #1 — Please proceed to Task 2 (Log In).</p>
+      <button id="closePopup">OK</button>
+    </div>
+  </div>
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyDEvh_PdsRDCWqpY8qpvq7yif7fY6hZMNHKzG-D2alxqftJS8x37hzXk5NCyQQ4ZV-JA/exec";
+
+  document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const name = document.getElementById('fullName').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const phone = document.getElementById('phone').value.trim();
+    const dob = document.getElementById('dob').value.trim();
+    const pw = document.getElementById('password').value;
+    const confirm = document.getElementById('confirmPassword').value;
+    const errEl = document.getElementById('signupError');
+    errEl.style.display = 'none';
+    errEl.textContent = '';
+
+    if (!name || !username || !email || !pw || !confirm) {
+      errEl.style.display = 'block';
+      errEl.textContent = 'Please fill all required fields.';
+      return;
+    }
+    if (pw.length < 4) {
+      errEl.style.display = 'block';
+      errEl.textContent = 'Password must be at least 4 characters.';
+      return;
+    }
+    if (pw !== confirm) {
+      errEl.style.display = 'block';
+      errEl.textContent = 'Passwords do not match.';
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("action", "signup");
+    formData.append("name", name);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("password", pw);
+    formData.append("phone", phone);
+    formData.append("dob", dob);
+
+    try {
+      const response = await fetch(scriptURL, { method: "POST", body: formData });
+      const result = await response.text();
+
+      if (result === "added") {
+        document.getElementById('popup').style.display = 'flex';
+      } else if (result === "exists") {
+        errEl.style.display = 'block';
+        errEl.textContent = 'Username or email already exists.';
+      } else {
+        errEl.style.display = 'block';
+        errEl.textContent = 'Something went wrong. Please try again.';
+      }
+    } catch (error) {
+      errEl.style.display = 'block';
+      errEl.textContent = 'Network error. Try again later.';
+    }
+  });
+
+  document.getElementById('closePopup').addEventListener('click', () => {
+    document.getElementById('popup').style.display = 'none';
+    window.location.href = 'login.html';
+  });
+</script>
+</body>
+</html>

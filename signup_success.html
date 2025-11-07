@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>StellaRead — Signed Up</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <section class="card">
+      <div class="topbar">
+        <img src="Glow ng StellaRead.png" alt="StellaRead" class="logo">
+        <div class="topbar-right">
+          <span class="muted">&nbsp;</span>
+          <a href="login.html" class="link">Log In</a>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="left">
+          <h1>Account Created</h1>
+          <p class="kv">Your account has been created successfully.</p>
+          <div style="margin-top:16px">
+            <a href="login.html" class="btn btn-primary">Go to Log In</a>
+          </div>
+        </div>
+
+        <div class="right center">
+          <img src="booktree.png" class="book-image" alt="booktree">
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+(function(){
+  const info = sessionStorage.getItem('last_signup');
+  if(info){
+    const obj = JSON.parse(info);
+    // optionally you can display the username/name here
+    // e.g. document.querySelector('.kv').textContent = 'Welcome, ' + obj.name;
+    sessionStorage.removeItem('last_signup');
+  }
+})();
+</script>
+</body>
+</html>
