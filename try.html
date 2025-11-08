@@ -210,12 +210,16 @@
     <section id="profilePage" class="card">
       <h2>👤 Profile</h2>
       <form id="profileForm">
-        <label for="name">Display Name</label>
+        <label for="name">Full Name</label>
         <input type="text" id="name" value="Guest Reader">
         <label for="email">Email</label>
         <input type="email" id="email" value="guest@stellaread.com">
         <label for="bio">Bio</label>
         <textarea id="bio">Book lover and curious mind.</textarea>
+        <label for="dob">Date of Birth</label>
+        <input id="dob" type="date" required>
+        <label for="phone">Phone Number</label>
+        <input id="phone" type="tel" placeholder="09*********" required>
         <button type="submit" class="btn">Save Profile</button>
         <button type="submit" class="btn" id="btnl">Log Out</button>
       </form>
@@ -248,7 +252,7 @@
 <script>
   const books = [
     { title: "The Great Gatsby", author: "F. Scott Fitzgerald", rating: 4.5, cover: "https://picsum.photos/seed/a/200/280" },
-    { title: "To Kill a Mockingbird", author: "Harper Lee", rating: 4.8, cover: "https://picsum.photos/seed/b/200/280" },
+    { title: "To Kill a Mockin  gbird", author: "Harper Lee", rating: 4.8, cover: "https://picsum.photos/seed/b/200/280" },
     { title: "1984", author: "George Orwell", rating: 4.7, cover: "https://picsum.photos/seed/c/200/280" },
     { title: "Pride and Prejudice", author: "Jane Austen", rating: 4.6, cover: "https://picsum.photos/seed/d/200/280" }
   ];
@@ -386,8 +390,8 @@ async function loadProfile() {
       document.getElementById("name").value = data.name || "";
       document.getElementById("email").value = data.email || "";
       // uncomment pag magdadagdag ng fields
-      // document.getElementById("dob").value = data.dob || "";
-      // document.getElementById("phone").value = data.phone || "";
+      document.getElementById("dob").value = data.dob || "";
+      document.getElementById("phone").value = data.phone || "";
       localStorage.setItem("stella_user_canonical", data.username);
     } else {
       alert("⚠️ Could not load your profile data.");
@@ -405,16 +409,16 @@ document.getElementById("profileForm").addEventListener("submit", async (e) => {
   const originalUsername = localStorage.getItem("stella_user_canonical") || localStorage.getItem("stella_user");
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
-  // const dob = document.getElementById("dob").value.trim();
-  // const phone = document.getElementById("phone").value.trim();
+  const dob = document.getElementById("dob").value.trim();
+  const phone = document.getElementById("phone").value.trim();
 
   const params = new URLSearchParams({
     action: "updateProfile",
     originalUsername: originalUsername,
     name: name,
-    email: email
-    // dob: dob,
-    // phone: phone
+    email: email,
+    dob: dob,
+    phone: phone
   });
 
   try {
