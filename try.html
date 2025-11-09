@@ -122,61 +122,35 @@
       border-radius: 8px;
       border: 1px solid #ccc;
     }
-
     .book-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
     }
-
     .book {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       background: var(--card);
       border-radius: 12px;
       box-shadow: var(--shadow);
-      padding: 1rem;
-      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      padding: .8rem;
     }
-
-    .book:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    .book-info {
-      flex: 1;
-      padding-right: 1rem;
-    }
-
-    .book-info h3 {
-      margin: 0 0 0.3rem 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .book-info p {
-      margin: 0.2rem 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
-
-    .book-info .rating {
-      color: #f5a623;
-      font-size: 1.1rem;
-      margin-bottom: 0.3rem;
-    }
-
     .book img {
-      width: 120px;
-      height: auto;
-      object-fit: contain;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      width: 100%;
+      border-radius: 6px;
     }
-
+    .book h3 {
+      margin: .5rem 0 0;
+      font-size: 1rem;
+      color: var(--accent);
+    }
+    .book p {
+      margin: .2rem 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .favorite {
+      cursor: pointer;
+      font-size: 1.3rem;
+    }
     #btnl {
       background-color: red;
     }
@@ -233,7 +207,6 @@
   </header>
 
   <main>
-    <!-- PROFILE  -->
     <section id="profilePage" class="card">
       <h2>👤 Profile</h2>
       <form id="profileForm">
@@ -248,11 +221,10 @@
         <label for="phone">Phone Number</label>
         <input id="phone" type="tel" placeholder="09*********" required>
         <button type="submit" class="btn">Save Profile</button>
-        <button type="button" class="btn" id="btnl">Log Out</button>
+        <button type="submit" class="btn" id="btnl">Log Out</button>
       </form>
     </section>
 
-    <!-- HOME  -->
     <section id="homePage" class="card" style="display:none">
       <div class="toolbar">
         <div class="search">
@@ -279,27 +251,25 @@
 
 <script>
   const books = [
-    { title: "Harry Potter Vol. 1 🪄🔍", author: "J. K. Rowling - 1997", rating: 4, cover: "book covers/harry.png" },
-    { title: "The Subtle Art of Not Giving a F*ck 🧠🍭", author: "Mark Manson - 2016", rating: 5, cover: "book covers/fck.jpg" },
-    { title: "True Beauty 💄💞", author: "Priscilla Wu - 2022", rating: 4, cover: "book covers/tb.jpg" }
+    { title: "The Great Gatsby", author: "F. Scott Fitzgerald", rating: 4.5, cover: "https://picsum.photos/seed/a/200/280" },
+    { title: "To Kill a Mockin  gbird", author: "Harper Lee", rating: 4.8, cover: "https://picsum.photos/seed/b/200/280" },
+    { title: "1984", author: "George Orwell", rating: 4.7, cover: "https://picsum.photos/seed/c/200/280" },
+    { title: "Pride and Prejudice", author: "Jane Austen", rating: 4.6, cover: "https://picsum.photos/seed/d/200/280" }
   ];
 
+  let favorites = [];
   const list = document.getElementById("bookList");
 
   function renderBooks(arr) {
     list.innerHTML = "";
-    arr.forEach((b) => {
-      const stars = "⭐".repeat(b.rating) + "☆".repeat(5 - b.rating);
+    arr.forEach((b, i) => {
       const div = document.createElement("div");
       div.className = "book";
-      div.innerHTML = `
-        <div class="book-info">
-          <h3>${b.title}</h3>
-          <div class="rating">${stars}</div>
-          <p>${b.author}</p>
-        </div>
-        <img src="${b.cover}" alt="${b.title}">
-      `;
+      div.innerHTML = `<img src="${b.cover}" alt="">
+        <h3>${b.title}</h3>
+        <p>${b.author}</p>
+        <p>⭐ ${b.rating}</p>
+        <span class="favorite" data-index="${i}" title="Add to Favorites">♡</span>`;
       list.appendChild(div);
     });
   }
@@ -310,31 +280,164 @@
     const term = document.getElementById("searchInput").value.toLowerCase();
     const results = books.filter(b => b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term));
     renderBooks(results);
+    showPopup(4, "You accomplished Task 4 — Please proceed to Task 5 (View Book Details).");
   };
 
   document.getElementById("sortSelect").onchange = e => {
+    let arr = [...books];
     const v = e.target.value;
-    let sorted = [...books];
-    if (v === "title") sorted.sort((a,b)=>a.title.localeCompare(b.title));
-    if (v === "author") sorted.sort((a,b)=>a.author.localeCompare(b.author));
-    if (v === "rating") sorted.sort((a,b)=>b.rating - a.rating);
-    renderBooks(sorted);
+    if (v === "title") arr.sort((a, b) => a.title.localeCompare(b.title));
+    if (v === "author") arr.sort((a, b) => a.author.localeCompare(b.author));
+    if (v === "rating") arr.sort((a, b) => b.rating - a.rating);
+    renderBooks(arr);
+    showPopup(10, "You accomplished Task 10 — Please proceed to Task 11 (Toggle Theme Change).");
   };
 
-  const profile = document.getElementById("profilePage");
-  const home = document.getElementById("homePage");
-  document.getElementById("navProfile").onclick = () => { profile.style.display = "block"; home.style.display = "none"; };
-  document.getElementById("navHome").onclick = () => { profile.style.display = "none"; home.style.display = "block"; };
+  list.addEventListener("click", e => {
+    if (e.target.classList.contains("favorite")) {
+      const i = e.target.dataset.index;
+      if (!favorites.includes(books[i])) favorites.push(books[i]);
+      e.target.textContent = "❤️";
+      showPopup(9, "You accomplished Task 9 — Please proceed to Task 10 (Sort Books).");
+    }
+  });
+
+  document.getElementById("profileForm").onsubmit = e => {
+    e.preventDefault();
+    showPopup(3, "You accomplished Task 3 — Please proceed to Task 4 (Search Books).");
+  };
 
   document.getElementById("toggleTheme").onclick = () => {
     const current = document.body.getAttribute("data-theme");
     document.body.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+    showPopup(11, "You accomplished Task 11 — Please proceed to Task 12 (Log Out).");
   };
 
-  document.getElementById("btnl").onclick = () => {
-    localStorage.removeItem("stella_user");
-    window.location.href = "login.html";
+  document.getElementById("btnl").addEventListener("click", e => {
+    e.preventDefault();
+    sessionStorage.clear();
+
+    const popup = document.createElement("div");
+    popup.style.position = "fixed";
+    popup.style.inset = "0";
+    popup.style.background = "rgba(0,0,0,0.5)";
+    popup.style.display = "flex";
+    popup.style.alignItems = "center";
+    popup.style.justifyContent = "center";
+    popup.style.zIndex = "1000";
+
+    popup.innerHTML = `
+      <div style="
+        background:#fff;
+        color:#222;
+        padding:2rem;
+        border-radius:14px;
+        max-width:400px;
+        text-align:center;
+        box-shadow:0 10px 30px rgba(0,0,0,0.3);
+        font-family:'Poppins',sans-serif;">
+        <h2 style="color:#2f6bed;margin-top:0;">✅ Task Completed!</h2>
+        <p style="margin:0.5rem 0 1rem;">You accomplished Task 12. This concludes the Usability Testing.</p>
+        <p style="margin-bottom:1rem;">Please proceed to answer the survey by clicking the link below:</p>
+        <a href="#" target="_blank" style="display:inline-block;color:#fff;background:#31493c;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;">Go to Survey</a>
+        <br><br>
+        <button id="closeLogoutPopup" style="margin-top:8px;padding:8px 14px;border:none;border-radius:8px;background:#ccc;cursor:pointer;font-weight:600;">Close</button>
+      </div>
+    `;
+    document.body.appendChild(popup);
+
+    document.getElementById("closeLogoutPopup").addEventListener("click", () => {
+      popup.remove();
+      window.location.href = "login.html";
+    });
+  });
+
+  const profile = document.getElementById("profilePage");
+  const home = document.getElementById("homePage");
+  document.getElementById("navProfile").onclick = () => {
+    profile.style.display = "block";
+    home.style.display = "none";
   };
+  document.getElementById("navHome").onclick = () => {
+    profile.style.display = "none";
+    home.style.display = "block";
+  };
+
+  const popup = document.getElementById("popup");
+  const msg = document.getElementById("popupMsg");
+  function showPopup(num, text) {
+    msg.textContent = text;
+    popup.style.display = "flex";
+  }
+  document.getElementById("closePopup").onclick = () => popup.style.display = "none";
+
+ const scriptURL = "https://script.google.com/macros/s/AKfycbyDEvh_PdsRDCWqpY8qpvq7yif7fY6hZMNHKzG-D2alxqftJS8x37hzXk5NCyQQ4ZV-JA/exec"; // 🔁 replace with your own URL
+
+// load profile
+async function loadProfile() {
+  const loginId = localStorage.getItem("stella_user");
+  if (!loginId) {
+    alert("⚠️ Please log in first.");
+    window.location.href = "login.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${scriptURL}?action=getProfile&username=${encodeURIComponent(loginId)}`);
+    const data = await res.json();
+
+    if (data.status === "success") {
+      document.getElementById("name").value = data.name || "";
+      document.getElementById("email").value = data.email || "";
+      // uncomment pag magdadagdag ng fields
+      document.getElementById("dob").value = data.dob || "";
+      document.getElementById("phone").value = data.phone || "";
+      localStorage.setItem("stella_user_canonical", data.username);
+    } else {
+      alert("⚠️ Could not load your profile data.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error while fetching profile data.");
+  }
+}
+
+// Save/Update Profile
+document.getElementById("profileForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const originalUsername = localStorage.getItem("stella_user_canonical") || localStorage.getItem("stella_user");
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const dob = document.getElementById("dob").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+
+  const params = new URLSearchParams({
+    action: "updateProfile",
+    originalUsername: originalUsername,
+    name: name,
+    email: email,
+    dob: dob,
+    phone: phone
+  });
+
+  try {
+    const res = await fetch(`${scriptURL}?${params.toString()}`, { method: "POST" });
+    const text = await res.text();
+
+    if (text === "updated") {
+      alert("✅ Profile updated successfully!");
+      loadProfile();
+    } else {
+      alert("⚠️ Failed to update profile. Response: " + text);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Network error while updating profile.");
+  }
+});
+
+document.addEventListener("DOMContentLoaded", loadProfile);
 </script>
 
 </body>
