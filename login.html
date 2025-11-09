@@ -106,18 +106,6 @@
     .book-image { width: 380px; max-width: 100%; height: auto; object-fit: contain; }
     .error { color: #b00020; }
 
-    /* Toggle Button */
-    .toggle-btn {
-      position: absolute;
-      right: 10px;
-      top: 8px;
-      border: none;
-      background: none;
-      color: var(--muted);
-      cursor: pointer;
-      font-weight: 600;
-    }
-
     @media (max-width: 900px) {
       .content { grid-template-columns: 1fr; padding: 22px; }
       .right { order: -1; margin-bottom: 18px; }
@@ -143,28 +131,19 @@
           <form id="loginForm" class="form" autocomplete="on" novalidate>
             <label for="loginId">Email or Username</label>
             <input id="loginId" name="loginId" type="text" placeholder="you@example.com or username" required>
-
             <label for="loginPassword">Password</label>
-            <div style="position:relative;">
-              <input id="loginPassword" name="loginPassword" type="password" placeholder="Enter your password" required>
-              <button type="button" id="toggleLoginPassword"
-                style="position:absolute;right:10px;top:8px;border:none;background:none;cursor:pointer;color:var(--muted);background-color: #2f2f2f; border-radius: 7px; font-size: x-large">
-                👁️
-              </button>
-            </div>
-
+            <input id="loginPassword" name="loginPassword" type="password" placeholder="Enter your password" required>
             <button class="btn btn-primary full" type="submit">Log In</button>
-
             <div class="social-row">
               <button class="social-btn" id="socialGoogle">Sign in with Google</button>
               <button class="social-btn" id="socialFacebook">Sign in with Facebook</button>
               <button class="social-btn" id="socialOther">Other</button>
             </div>
-
             <div class="row small-row">
               <a class="link" href="index.html">Create account</a>
+              <span class="kv">•</span>
+              <a href="#" id="forgot" class="link">Forgot Password?</a>
             </div>
-
             <p id="loginError" class="kv error" style="display:none">Invalid credentials — try again.</p>
           </form>
         </div>
@@ -178,20 +157,11 @@
 <script>
   const scriptURL = "https://script.google.com/macros/s/AKfycbyDEvh_PdsRDCWqpY8qpvq7yif7fY6hZMNHKzG-D2alxqftJS8x37hzXk5NCyQQ4ZV-JA/exec";
 
-  const toggleBtn = document.getElementById("toggleLoginPassword");
-  const pwField = document.getElementById("loginPassword");
-
-  toggleBtn.addEventListener("click", () => {
-    const isHidden = pwField.type === "password";
-    pwField.type = isHidden ? "text" : "password";
-    toggleBtn.textContent = isHidden ? "🚫" : "👁️";
-  });
-
   document.getElementById('loginForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const loginId = document.getElementById('loginId').value.trim();
-    const password = pwField.value.trim();
+    const password = document.getElementById('loginPassword').value.trim();
     const errorEl = document.getElementById('loginError');
     errorEl.style.display = 'none';
 
