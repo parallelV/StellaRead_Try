@@ -166,22 +166,10 @@
             <input id="dob" type="date" required>
 
             <label for="password">Password</label>
-            <div style="position:relative;">
-              <input id="password" type="password" placeholder="Create a password" required>
-              <button type="button" id="togglePassword"
-                style="position:absolute;right:10px;top:8px;border:none;background:none;cursor:pointer;color:var(--muted);background-color: #2f2f2f; border-radius: 7px; font-size: x-large">
-                👁️
-              </button>
-            </div>
+            <input id="password" type="password" placeholder="Create a password" required>
 
             <label for="confirmPassword">Confirm Password</label>
-            <div style="position:relative;">
-              <input id="confirmPassword" type="password" placeholder="Confirm password" required>
-              <button type="button" id="toggleConfirm"
-                style="position:absolute;right:10px;top:8px;border:none;background:none;cursor:pointer;color:var(--muted);background-color: #2f2f2f; border-radius: 7px; font-size: x-large;">
-                👁️
-              </button>
-            </div>
+            <input id="confirmPassword" type="password" placeholder="Confirm password" required>
 
             <button class="btn btn-primary full" type="submit">Sign Up</button>
             <p id="signupError" class="kv error" style="display:none" aria-live="assertive"></p>
@@ -271,20 +259,6 @@
     document.getElementById('popup').style.display = 'none';
     window.location.href = 'login.html';
   });
-
-  function setupShowPassword(btnId, inputId) {
-  const btn = document.getElementById(btnId);
-  const field = document.getElementById(inputId);
-
-  btn.addEventListener("click", () => {
-    const isHidden = field.type === "password";
-    field.type = isHidden ? "text" : "password";
-    btn.textContent = isHidden ? "🚫" : "👁️";
-  });
-  }
-
-  setupShowPassword("togglePassword", "password");
-  setupShowPassword("toggleConfirm", "confirmPassword");
 </script>
 </body>
 </html>
