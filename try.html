@@ -407,7 +407,7 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
       const res = await fetch(`${scriptURL}?${params.toString()}`, { method:"POST" });
       const text = await res.text();
       if(text === "updated"){
-        alert("✅ Profile updated successfully!");
+        showTask("✅ Profile updated successfully! \n You've accomplished Task 3 — Please proceed to Task 4 (Search a Book)");
         loadProfile();
       } else {
         alert("⚠️ Failed to update profile. Response: " + text);
@@ -429,4 +429,5 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
 
 </body>
 </html>
+
 
