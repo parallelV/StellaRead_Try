@@ -283,7 +283,7 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
     const term = document.getElementById("searchInput").value.toLowerCase();
     const filtered = books.filter(b => b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term));
     renderBooks(filtered);
-    showTask("You accomplished Task 4 — Please proceed to Task 5 (View Book Details).");
+    showTask("You accomplished Task 4 (Search a Book) — Please proceed to Task 5 (View Book Details).");
   });
 
   document.getElementById("sortSelect").addEventListener("change", (e)=>{
@@ -407,7 +407,7 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
       const res = await fetch(`${scriptURL}?${params.toString()}`, { method:"POST" });
       const text = await res.text();
       if(text === "updated"){
-        showTask("✅ Profile updated successfully! \n You've accomplished Task 3 — Please proceed to Task 4 (Search a Book)");
+        showTask("✅ Profile updated successfully!");
         loadProfile();
       } else {
         alert("⚠️ Failed to update profile. Response: " + text);
@@ -420,14 +420,47 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
 
   document.addEventListener("DOMContentLoaded", loadProfile);
 
-  // Log Out
-  document.getElementById("btnl").addEventListener("click", ()=>{
-    showTask("Logged out successfully!");
-  });
+  document.getElementById("btnl").addEventListener("click", e => {
+      e.preventDefault();
+      sessionStorage.clear();
+
+      const popup = document.createElement("div");
+      popup.style.position = "fixed";
+      popup.style.inset = "0";
+      popup.style.background = "rgba(0,0,0,0.5)";
+      popup.style.display = "flex";
+      popup.style.alignItems = "center";
+      popup.style.justifyContent = "center";
+      popup.style.zIndex = "1000";
+
+      popup.innerHTML = `
+        <div style="
+          background:#fff;
+          color:#222;
+          padding:2rem;
+          border-radius:14px;
+          max-width:400px;
+          text-align:center;
+          box-shadow:0 10px 30px rgba(0,0,0,0.3);
+          font-family:'Poppins',sans-serif;">
+          <h2 style="color:#2f6bed;margin-top:0;">✅ Task Completed!</h2>
+          <p style="margin:0.5rem 0 1rem;">You accomplished Task 12. This concludes the Usability Testing.</p>
+          <p style="margin-bottom:1rem;">Please proceed to answer the survey by clicking the link below:</p>
+          <a href="#" target="_blank" style="display:inline-block;color:#fff;background:#31493c;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;">Go to Survey</a>
+          <br><br>
+          <button id="closeLogoutPopup" style="margin-top:8px;padding:8px 14px;border:none;border-radius:8px;background:#ccc;cursor:pointer;font-weight:600;">Close</button>
+        </div>
+      `;
+      document.body.appendChild(popup);
+
+      document.getElementById("closeLogoutPopup").addEventListener("click", () => {
+        popup.remove();
+        window.location.href = "login.html";
+      });
+    });
 
 </script>
 
 </body>
 </html>
-
 
