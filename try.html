@@ -117,6 +117,8 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
           <option value="title">Sort by Title (A–Z)</option>
           <option value="author">Sort by Author</option>
           <option value="rating">Sort by Rating (High → Low)</option>
+          <option value="year-newest">Sort by Year Released (Newest → Oldest)</option>
+          <option value="year-oldest">Sort by Year Released (Oldest → Newest)</option>
         </select>
       </div>
       <div id="bookList" class="book-grid"></div>
@@ -170,9 +172,18 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
   // Data
   // ========================
   const books = [
-    { title:"Harry Potter Vol. 1", author:"J.K. Rowling", rating:4, cover:"book covers/harry.jpg", description:"A young wizard's journey begins." },
-    { title:"The Subtle Art of Not Giving a F*ck", author:"Mark Manson", rating:5, cover:"book covers/fck.jpg", description:"A guide to living a better life." },
-    { title:"True Beauty", author:"Priscilla Wu", rating:4, cover:"book covers/tb.jpg", description:"A story about inner and outer beauty." }
+    { title:"Harry Potter Vol. 1", author:"J.K. Rowling - 1997", rating:4, cover:"book covers/harry.jpg", description:"A young wizard's journey begins." },
+    { title:"The Subtle Art of Not Giving a F*ck", author:"Mark Manson - 2016", rating:5, cover:"book covers/fck.jpg", description:"A guide to living a better life." },
+    { title:"True Beauty", author:"Priscilla Wu - 2018", rating:4, cover:"book covers/tb.jpg", description:"A story about inner and outer beauty." },
+    { title:"The Road 🌫️🚶‍♂️", author:"Cormac McCarthy – 2006", rating:3, cover:"book covers/road.jpg", description:"A haunting tale of a father and son struggling to survive in a post-apocalyptic world." },
+    { title:"The Hunger Games 🏹🔥", author:"Suzanne Collins – 2008", rating:4, cover:"book covers/hunger.jpg", description:"A brave young girl fights for survival in a deadly televised competition." },
+    { title:"The Night Circus 🎪🌙", author:"Erin Morgenstern – 2011", rating:5, cover:"book covers/circus.jpg", description:"A magical circus becomes the stage for a fierce competition between two young illusionists." },
+    { title:"The Fault in Our Stars 💔💫", author:"John Green – 2012", rating:2, cover:"book covers/fault.jpg", description:"Two teens with cancer fall in love and learn the meaning of life, love, and loss." },
+    { title:"Gone Girl 🕵️‍♀️🌀", author:"Gillian Flynn – 2012", rating:4, cover:"book covers/gone.jpg", description:"A husband becomes the prime suspect when his wife mysteriously disappears." },
+    { title:"The Martian 🚀🪐", author:"Andy Weir – 2011", rating:3, cover:"book covers/martian.jpg", description:"An astronaut stranded on Mars uses science and wit to survive alone on the red planet." },
+    { title:"The Midnight Library ⏳📚", author:"Matt Haig – 2020", rating:3, cover:"book covers/midnight.jpg", description:"A woman explores alternate versions of her life in a mystical library between life and death." },
+    { title:"The Hobbit 💫👶", author:"J.R.R. Tolkien – 1937", rating:4, cover:"book covers/hobbit.PNG", description:"A timid hobbit embarks on an epic quest to reclaim a lost dwarven treasure guarded by a dragon." },
+    { title:"The Kite Runner 🪁🏃‍♂️", author:"Khaled Hosseini – 2003", rating:2, cover:"book covers/kite.jpg", description:"A man confronts his past and seeks redemption for a childhood betrayal in Afghanistan." }
   ];
 
   let displayedBooks = [...books];
@@ -276,24 +287,43 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
     taskPopup.style.display = "none";
   });
 
-  // ========================
-  // Search & Sort
-  // ========================
-  document.getElementById("searchBtn").addEventListener("click", ()=>{
-    const term = document.getElementById("searchInput").value.toLowerCase();
-    const filtered = books.filter(b => b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term));
-    renderBooks(filtered);
-    showTask("You accomplished Task 4 (Search a Book) — Please proceed to Task 5 (View Book Details).");
+// Search & Sort
+document.getElementById("searchBtn").addEventListener("click", () => {
+  const term = document.getElementById("searchInput").value.toLowerCase();
+  const filtered = books.filter(b =>
+    b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term)
+  );
+  renderBooks(filtered);
+  showTask("You accomplished Task 4 (Search a Book) — Please proceed to Task 5 (View Book Details).");
+});
+
+document.getElementById("sortSelect").addEventListener("change", (e) => {
+  const v = e.target.value;
+
+  let arr = [...displayedBooks].map(book => {
+    const cleanTitle = book.title.replace(/[^\w\s]/g, '').trim().toLowerCase();
+    const cleanAuthor = book.author.replace(/[^\w\s]/g, '').trim().toLowerCase();
+    const yearMatch = book.author.match(/(\d{4})/);
+    const year = yearMatch ? parseInt(yearMatch[1]) : 0;
+    return { ...book, cleanTitle, cleanAuthor, year };
   });
 
-  document.getElementById("sortSelect").addEventListener("change", (e)=>{
-    let arr = [...displayedBooks];
-    if(e.target.value === "title") arr.sort((a,b)=> a.title.localeCompare(b.title));
-    if(e.target.value === "author") arr.sort((a,b)=> a.author.localeCompare(b.author));
-    if(e.target.value === "rating") arr.sort((a,b)=> b.rating - a.rating);
-    renderBooks(arr);
-    showTask("You accomplished Task 10 — Please proceed to Task 11 (Toggle Theme Change).");
-  });
+  if (v === "title") {
+    arr.sort((a, b) => a.cleanTitle.localeCompare(b.cleanTitle));
+  } else if (v === "author") {
+    arr.sort((a, b) => a.cleanAuthor.localeCompare(b.cleanAuthor));
+  } else if (v === "rating") {
+    arr.sort((a, b) => b.rating - a.rating);
+  } else if (v === "year-newest") {
+    arr.sort((a, b) => b.year - a.year);
+  }else if (v === "year-oldest") {
+    arr.sort((a, b) => a.year - b.year);
+  }
+
+  renderBooks(arr.map(({ cleanTitle, cleanAuthor, year, ...book }) => book));
+
+  showTask("You accomplished Task 10 — Please proceed to Task 11 (Toggle Theme Change).");
+});
 
   // ========================
   // Dark/Light Theme
@@ -463,5 +493,4 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
 
 </body>
 </html>
-
 
