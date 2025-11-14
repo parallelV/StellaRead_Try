@@ -79,7 +79,8 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
     <nav>
       <button id="navProfile">Profile</button>
       <button id="navHome">Home</button>
-      <button id="toggleTheme">🌙</button>
+      <button id="tasks">Tasks 📝</button>
+      <button id="toggleTheme">Theme 🌙</button>
     </nav>
   </header>
 
@@ -168,9 +169,7 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
     </div>
 
 <script>
-  // ========================
-  // Data
-  // ========================
+// Data
   const books = [
     { title:"Harry Potter Vol. 1", author:"J.K. Rowling - 1997", rating:4, cover:"book covers/harry.jpg", description:"A young wizard's journey begins." },
     { title:"The Subtle Art of Not Giving a F*ck", author:"Mark Manson - 2016", rating:5, cover:"book covers/fck.jpg", description:"A guide to living a better life." },
@@ -205,11 +204,9 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
   const taskPopup = document.getElementById("taskPopup");
   const taskMsg = document.getElementById("taskMsg");
 
-  // ========================
   // Utility Functions
-  // ========================
   function showTask(msg){
-    taskMsg.textContent = msg;
+    taskMsg.innerHTML = String(msg).replace(/\n/g, "<br>");
     taskPopup.style.display = "flex";
   }
 
@@ -258,14 +255,10 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
     return Array.from(reviewStars.children).filter(s => s.classList.contains("selected")).length;
   }
 
-  // ========================
   // Initial Render
-  // ========================
   renderBooks(displayedBooks);
 
-  // ========================
   // Navigation
-  // ========================
   const profile = document.getElementById("profilePage");
   const home = document.getElementById("homePage");
 
@@ -280,22 +273,20 @@ select { border:1px solid #ccc; border-radius:8px; padding:10px; font-weight:500
     renderBooks(displayedBooks);
   });
 
-  // ========================
   // Task Popup
-  // ========================
   document.getElementById("closeTaskPopup").addEventListener("click", ()=>{
     taskPopup.style.display = "none";
   });
 
-// Search & Sort
-document.getElementById("searchBtn").addEventListener("click", () => {
+  // Search & Sort
+  document.getElementById("searchBtn").addEventListener("click", () => {
   const term = document.getElementById("searchInput").value.toLowerCase();
   const filtered = books.filter(b =>
     b.title.toLowerCase().includes(term) || b.author.toLowerCase().includes(term)
   );
   renderBooks(filtered);
   showTask("You accomplished Task 4 (Search a Book) — Please proceed to Task 5 (View Book Details).");
-});
+  });
 
 document.getElementById("sortSelect").addEventListener("change", (e) => {
   const v = e.target.value;
@@ -322,26 +313,43 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
 
   renderBooks(arr.map(({ cleanTitle, cleanAuthor, year, ...book }) => book));
 
-  showTask("You accomplished Task 10 — Please proceed to Task 11 (Toggle Theme Change).");
+  showTask("You accomplished Task 10 (Sort Books) — Please proceed to Task 11 (Toggle Theme Change).");
 });
 
-  // ========================
   // Dark/Light Theme
-  // ========================
   document.getElementById("toggleTheme").addEventListener("click", ()=>{
     const current = document.body.getAttribute("data-theme");
     document.body.setAttribute("data-theme", current==="dark" ? "light" : "dark");
-    showTask("You accomplished Task 11 — Please proceed to Task 12 (Log Out).");
+    showTask("You accomplished  (Toggle Theme) — Please proceed to Task 12 (Log Out).");
   });
 
-  // ========================
-  // Book Popup
-  // ========================
+  // tasks
+  document.getElementById("tasks").addEventListener("click", () => {
+    showTask(
+      "📋 StellaRead Usability Testing Tasks 📋" +
+      "<ol>" +
+        "<li>Sign Up</li>" +
+        "<li>Log In</li>" +
+        "<li>Edit Profile</li>" +
+        "<li>Search Books</li>" +
+        "<li>View Book Details</li>" +
+        "<li>Rate a Book</li>" +
+        "<li>Write a Review</li>" +
+        "<li>Edit/Delete Review</li>" +
+        "<li>Add to Favorites</li>" +
+        "<li>Sort Books</li>" +
+        "<li>Toggle Theme</li>" +
+        "<li>Log Out</li>" +
+      "</ol>"
+    );
+  });
+
+// Book Popup
   list.addEventListener("click", (e)=>{
     const div = e.target.closest(".book");
     if(!div) return;
     openBookPopup(div.dataset.index);
-    showTask("You’ve accomplished Task 5 (View Book Details) — Please proceed to Task 6.");
+    showTask("You’ve accomplished Task 5 (View Book Details) — Please proceed to Task 6 (Rate a Book).");
   });
 
   closeBookPopup.addEventListener("click", ()=>{ bookPopup.style.display = "none"; });
@@ -366,7 +374,7 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
     };
     reviewSection.style.display = "none";
     clearReview();
-    showTask(`You've Accomplished Task 6 and 7 (Rated and Reviewed "${book.title}") — Please proceed to Task 8.`);
+    showTask(`You've Accomplished Task 6 and 7 (Rated and Reviewed "${book.title}") — Please proceed to Task 8 (Delete Review).`);
   });
 
   // Delete Review
@@ -374,7 +382,7 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
     if(selectedBookIndex === null) return;
     const book = displayedBooks[selectedBookIndex];
     delete reviews[book.title];
-    showTask("You've Accomplished Task 8 (Delete a Review) — Please proceed to Task 9.");
+    showTask("You've Accomplished Task 8 (Delete a Review) — Please proceed to Task 9 (Add book to Favorites).");
   });
 
   // Favorites
@@ -386,15 +394,13 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
       showTask(`Removed "${title}" from Favorites.`);
     } else {
       favorites.push(title);
-      showTask(`You've accomplished Task 9 (Added "${title}" to Favorites)! — Please proceed to Task 10.`);
+      showTask(`You've accomplished Task 9 (Added "${title}" to Favorites)! — Please proceed to Task 10 (Sort Books).`);
     }
     updateFavoriteButton(title);
     localStorage.setItem("favorites", JSON.stringify(favorites));
   });
 
-  // ========================
   // Profile & DB
-  // ========================
   const scriptURL = "https://script.google.com/macros/s/AKfycbyDEvh_PdsRDCWqpY8qpvq7yif7fY6hZMNHKzG-D2alxqftJS8x37hzXk5NCyQQ4ZV-JA/exec";
 
   async function loadProfile(){
@@ -437,7 +443,7 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
       const res = await fetch(`${scriptURL}?${params.toString()}`, { method:"POST" });
       const text = await res.text();
       if(text === "updated"){
-        showTask("✅ Profile updated successfully! \n You've Accomplished Task 3 — Please proceed to Task 4 (Search a Book.)");
+        showTask("✅ Profile updated successfully! \n You've Accomplished Task 3 (Edit Profile) — Please proceed to Task 4 (Search a Book.)");
         loadProfile();
       } else {
         alert("⚠️ Failed to update profile. Response: " + text);
@@ -474,7 +480,7 @@ document.getElementById("sortSelect").addEventListener("change", (e) => {
           box-shadow:0 10px 30px rgba(0,0,0,0.3);
           font-family:'Poppins',sans-serif;">
           <h2 style="color:#2f6bed;margin-top:0;">✅ Task Completed!</h2>
-          <p style="margin:0.5rem 0 1rem;">You accomplished Task 12. This concludes the Usability Testing.</p>
+          <p style="margin:0.5rem 0 1rem;">You accomplished Task 12 (Log Out). This concludes the Usability Testing.</p>
           <p style="margin-bottom:1rem;">Please proceed to answer the survey by clicking the link below:</p>
           <a href="#" target="_blank" style="display:inline-block;color:#fff;background:#31493c;padding:10px 16px;border-radius:8px;text-decoration:none;font-weight:600;">Go to Survey</a>
           <br><br>
